@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/cursos', [CursoController::class, 'index']);
+Route::post('/cursos', [CursoController::class, 'store']);
 
 Route::get('/', function () {
     return response()->json([

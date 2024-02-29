@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nome');
             $table->string('plataforma');
             $table->date('data_inicio');
-            $table->date('data_fim');
-            $table->enum('status', ['c', 'f']);
+            $table->date('data_fim')->default(null)->nullable();
+            $table->enum('status', ['c', 'f'])->default('c');
             $table->timestamps();
         });
     }
