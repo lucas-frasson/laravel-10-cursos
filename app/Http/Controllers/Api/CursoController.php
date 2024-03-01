@@ -33,4 +33,15 @@ class CursoController extends Controller
 
          return new CursoResource($curso);
     }
+
+    public function update(StoreUpdateCursoRequest $request, string $id)
+    {
+         $data = $request->all();
+
+         $curso = Curso::findOrFail($id);
+
+         $curso->update($data);
+
+         return new CursoResource($curso);
+    }
 }

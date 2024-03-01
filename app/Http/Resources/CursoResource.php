@@ -18,7 +18,9 @@ class CursoResource extends JsonResource
             'id' => $this->id,
             'nome' => $this->nome,
             'plataforma' => $this->plataforma,
-            'data_inicio' => $this->data_inicio
+            'data_inicio' => $this->data_inicio,
+            'data_fim' => $this->data_fim,
+            'status' => $this->status,
         ];
     }
 }
