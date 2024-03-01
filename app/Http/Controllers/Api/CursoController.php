@@ -8,6 +8,7 @@ use App\Http\Resources\CursoResource;
 use App\Models\Curso;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CursoController extends Controller
 {
@@ -43,5 +44,14 @@ class CursoController extends Controller
          $curso->update($data);
 
          return new CursoResource($curso);
+    }
+
+    public function destroy(string $id)
+    {
+         $curso = Curso::findOrFail($id);
+
+         $curso->delete();
+
+         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
