@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUpdateCursoRequest;
 use App\Http\Resources\CursoResource;
 use App\Models\Curso;
 use Exception;
@@ -17,11 +18,18 @@ class CursoController extends Controller
          return CursoResource::collection($cursos);
     }
 
-    public function store(Request $request)
+    public function store(StoreUpdateCursoRequest $request)
     {
-         $data = $request->all();
+         $data = $request->validated();
 
          $curso = Curso::create($data);
+
+         return new CursoResource($curso);
+    }
+
+    public function show(string $id)
+    {
+         $curso = Curso::findOrFail($id);
 
          return new CursoResource($curso);
     }
