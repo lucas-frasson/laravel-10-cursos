@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'auth']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::apiResource('/cursos', CursoController::class);
+
 // Rota de cursos
 Route::middleware(['auth:sanctum'])->group(function (){
-    Route::apiResource('/cursos', CursoController::class);
     // Route::delete('/cursos/{id}', [CursoController::class, 'destroy']);
     // Route::patch('/cursos/{id}', [CursoController::class, 'update']);
     // Route::get('/cursos/{id}', [CursoController::class, 'show']);

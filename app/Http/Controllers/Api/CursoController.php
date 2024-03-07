@@ -14,7 +14,8 @@ class CursoController extends Controller
 {
     public function index()
     {
-         $cursos = Curso::paginate();
+         $cursos = Curso::all();
+     //  $cursos = Curso::paginate();
 
          return CursoResource::collection($cursos);
     }
