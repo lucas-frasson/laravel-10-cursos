@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,8 +19,8 @@ class CursoResource extends JsonResource
             'id' => $this->id,
             'nome' => $this->nome,
             'plataforma' => $this->plataforma,
-            'data_inicio' => $this->data_inicio,
-            'data_fim' => $this->data_fim,
+            'data_inicio' => Carbon::parse($this->data_inicio)->tz('America/Sao_Paulo')->format('d/m/Y'),
+            'data_fim' => $data_fim = ($this->data_fim != null) ? Carbon::parse($this->data_fim)->tz('America/Sao_Paulo')->format('d/m/Y') : $this->data_fim,
             'status' => $this->status,
         ];
     }
