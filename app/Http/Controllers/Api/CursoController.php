@@ -42,6 +42,12 @@ class CursoController extends Controller
 
          $curso = Curso::findOrFail($id);
 
+         // Condição para atualizar a coluna status
+         if ($request->data_fim !== null) 
+         {
+          Curso::where('id', $id)->update(['status' => 'f']);
+         }
+
          $curso->update($data);
 
          return new CursoResource($curso);
