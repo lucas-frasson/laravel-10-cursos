@@ -14,7 +14,8 @@ class CursoController extends Controller
 {
     public function index()
     {
-         $cursos = Curso::all();
+         // Listar todos os cursos orderby id asc
+         $cursos = Curso::orderBy('id', 'asc')->get();
      //  $cursos = Curso::paginate();
 
          return CursoResource::collection($cursos);
@@ -70,5 +71,19 @@ class CursoController extends Controller
          $curso->delete();
 
          return response()->json([], Response::HTTP_NO_CONTENT);
+    }
+
+    // deleted_at
+    public function delete_curso(string $id)
+    {
+          $curso = Curso::findOrFail($id);
+
+          if($curso){
+               Curso::where('id', $id)->update([
+                    'deleted_at' => date('Y-m-d H:i:s')
+               ]);
+          }
+
+          return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

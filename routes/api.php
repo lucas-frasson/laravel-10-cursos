@@ -17,6 +17,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     // Route::get('/cursos/{id}', [CursoController::class, 'show']);
     // Route::get('/cursos', [CursoController::class, 'index']);
     // Route::post('/cursos', [CursoController::class, 'store']); 
+    Route::get('/delete_curso/{id}', [CursoController::class, 'delete_curso']);
 });
 
 // Rota de teste
