@@ -22,6 +22,16 @@ class CursoController extends Controller
 
     public function store(StoreUpdateCursoRequest $request)
     {
+
+         // Verificar se já existe um curso com o mesmo nome
+         $curso = Curso::where('nome', $request->nome)->first();
+
+         if ($curso) {
+             return response()->json([
+                 'error' => 'Já existe um curso com esse nome!'
+             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+         }
+
          $data = $request->validated();
 
          $curso = Curso::create($data);
