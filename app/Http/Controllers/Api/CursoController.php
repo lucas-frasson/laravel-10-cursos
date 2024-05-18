@@ -31,11 +31,19 @@ class CursoController extends Controller
          return CursoResource::collection($cursos);
     }
 
-    public function store(StoreUpdateCursoRequest $request)
+    public function store(Request $request)
     {
+         // Pegar email do usuário
+         $email = $request->email;
 
-         // Verificar se já existe um curso com o mesmo nome
-         $curso = Curso::where('nome', $request->nome)->first();
+         // Procurar o id do usuário com esse email
+         $user = User::where('email', $email)->first();
+
+         // Pegar o id do usuário
+         $id_user = $user->id;
+
+         // Verificar se já existe um curso com o id do usuário com o mesmo nome
+         $curso = Curso::where('id_user', $id_user)->where('nome', $request->nome)->first();
 
          if ($curso) {
              return response()->json([
@@ -43,9 +51,12 @@ class CursoController extends Controller
              ], Response::HTTP_UNPROCESSABLE_ENTITY);
          }
 
-         $data = $request->validated();
-
-         $curso = Curso::create($data);
+         $curso = Curso::create([
+          'id_user' => $id_user,
+           'nome' => $request->nome,
+           'plataforma' => $request->plataforma,
+           'data_inicio' => $request->data_inicio,
+         ]);
 
          return new CursoResource($curso);
     }
@@ -57,7 +68,7 @@ class CursoController extends Controller
          return new CursoResource($curso);
     }
 
-    public function update(StoreUpdateCursoRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
          $data = $request->all();
 

@@ -17,6 +17,7 @@ class CursoResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'id_user' => $this->id_user,
             'nome' => $this->nome,
             'plataforma' => $this->plataforma,
             'data_inicio' => Carbon::parse($this->data_inicio)->tz('America/Sao_Paulo')->format('d/m/Y'),
