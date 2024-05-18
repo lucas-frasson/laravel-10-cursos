@@ -11,12 +11,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 // Rota de cursos
 Route::middleware(['auth:sanctum'])->group(function (){
-    Route::apiResource('/cursos', CursoController::class);
-    // Route::delete('/cursos/{id}', [CursoController::class, 'destroy']);
-    // Route::patch('/cursos/{id}', [CursoController::class, 'update']);
-    // Route::get('/cursos/{id}', [CursoController::class, 'show']);
-    // Route::get('/cursos', [CursoController::class, 'index']);
-    // Route::post('/cursos', [CursoController::class, 'store']); 
+    // Route::apiResource('/cursos', CursoController::class);
+    Route::post('/cursos/index', [CursoController::class, 'index']);
+    Route::post('/cursos', [CursoController::class, 'store']); 
+    Route::get('/cursos/{id}', [CursoController::class, 'show']);
+    Route::patch('/cursos/{id}', [CursoController::class, 'update']);
+    Route::delete('/cursos/{id}', [CursoController::class, 'destroy']);
     Route::get('/delete_curso/{id}', [CursoController::class, 'delete_curso']);
 });
 

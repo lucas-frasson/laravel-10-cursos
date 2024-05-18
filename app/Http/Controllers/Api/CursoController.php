@@ -6,18 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateCursoRequest;
 use App\Http\Resources\CursoResource;
 use App\Models\Curso;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CursoController extends Controller
 {
-    public function index()
-    {
-         // Listar todos os cursos orderby id asc
-         $cursos = Curso::orderBy('id', 'asc')->get();
-     //  $cursos = Curso::paginate();
+    public function index(Request $request)
+    {     
+         // Pegar email do usuário
+         $email = $request->email;
 
+         // Procurar o id do usuário com esse email
+         $user = User::where('email', $email)->first();
+
+         // Pegar o id do usuário
+         $id = $user->id;
+
+         // Pegar todos os cursos do usuário orderby id asc
+         $cursos = Curso::where('id_user', $id)->orderBy('id', 'asc')->get();
+
+         // Retornar todos os cursos do usuário
          return CursoResource::collection($cursos);
     }
 
