@@ -52,7 +52,7 @@ class CursoController extends Controller
          }
 
          $curso = Curso::create([
-          'id_user' => $id_user,
+           'id_user' => $id_user,
            'nome' => $request->nome,
            'plataforma' => $request->plataforma,
            'data_inicio' => $request->data_inicio,
