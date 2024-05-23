@@ -69,4 +69,67 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    public function update_usuario(Request $request, string $id)
+    {
+        // Pegar usuário pelo id
+        $user = User::find($id);
+
+        // Verificar se o usuário existe
+        if (!$user) {
+            return response()->json([
+               'message' => 'Usuário não encontrado!'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Atualizar usuário
+        $user->update($request->all());
+
+        // Retornar usuário atualizado
+        return new UserResource($user);
+    }
+
+    public function destroy_usuario(string $id)
+    {
+        // Pegar usuário pelo id
+        $user = User::find($id);
+
+        // Verificar se o usuário existe
+        if (!$user) {
+            return response()->json([
+               'message' => 'Usuário não encontrado!'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Deletar usuário
+        $user->delete();
+
+        // Retornar mensagem de sucesso
+        return response()->json([
+           'message' => 'Usuário deletado com sucesso!'
+        ], Response::HTTP_NO_CONTENT);
+    }
+
+    public function delete_usuario(string $id)
+    {
+        // Pegar usuário pelo id
+        $user = User::find($id);
+
+        // Verificar se o usuário existe
+        if (!$user) {
+            return response()->json([
+               'message' => 'Usuário não encontrado!'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Deletar usuário
+        User::where('id', $id)->update([
+                'deleted_at' => date('Y-m-d H:i:s')
+        ]);
+
+        // Retornar mensagem de sucesso
+        return response()->json([
+           'message' => 'Usuário deletado com sucesso!'
+        ], Response::HTTP_NO_CONTENT);
+    }
+
 }
