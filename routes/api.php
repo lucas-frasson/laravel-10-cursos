@@ -23,10 +23,10 @@ Route::middleware(['auth:sanctum'])->group(function (){
 
     // CRUD Usuarios
     Route::get('/usuarios', [UserController::class, 'index_usuarios']);
-    Route::post('/usuarios', [UserController::class,'store_usuarios']); 
-    Route::get('/usuarios/{id}', [UserController::class,'show_usuarios']);
-    Route::patch('/usuarios/{id}', [UserController::class, 'update_usuarios']);
-    Route::delete('/usuarios/{id}', [UserController::class, 'destroy_usuarios']);
+    Route::post('/usuarios', [UserController::class,'store_usuario']); 
+    Route::get('/usuarios/{id}', [UserController::class,'show_usuario']);
+    Route::patch('/usuarios/{id}', [UserController::class, 'update_usuario']);
+    Route::delete('/usuarios/{id}', [UserController::class, 'destroy_usuario']);
     Route::get('/delete_usuario/{id}', [UserController::class, 'delete_usuario']);
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
     public function index_usuarios()
     {
         // Pegar todos os usuarios cadastrados no banco de dados orderby id asc
-        $users = User::orderBy('id', 'asc')->get();
+        $users = User::orderBy('id', 'asc')->get(); 
         
         // Retornar todos os usuários cadastrados
         return UserResource::collection($users);
@@ -32,21 +33,20 @@ class UserController extends Controller
         // Verificar se o usuário existe
         if ($user) {
             return response()->json([
-               'message' => 'Já existe um usuário cadastrado com esse email!'
+               'error' => 'Já existe um usuário cadastrado com esse email!'
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $email_verified_at = now();
+        // Criando senha com hash
         $password = Hash::make('password');
-        $remember_token = Str::random(10);
 
         // Criar novo usuário
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'email_verified_at' => $email_verified_at,
+            'email_verified_at' => now(),
             'password' => $password,
-            'remember_token' => $remember_token,
+            'remember_token' => Str::random(10),
         ]);
 
         // Retornar usuário criado
@@ -61,7 +61,7 @@ class UserController extends Controller
         // Verificar se o usuário existe
         if (!$user) {
             return response()->json([
-               'message' => 'Usuário não encontrado!'
+               'error' => 'Usuário não encontrado!'
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -77,7 +77,7 @@ class UserController extends Controller
         // Verificar se o usuário existe
         if (!$user) {
             return response()->json([
-               'message' => 'Usuário não encontrado!'
+               'error' => 'Usuário não encontrado!'
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -96,7 +96,7 @@ class UserController extends Controller
         // Verificar se o usuário existe
         if (!$user) {
             return response()->json([
-               'message' => 'Usuário não encontrado!'
+               'error' => 'Usuário não encontrado!'
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -117,7 +117,7 @@ class UserController extends Controller
         // Verificar se o usuário existe
         if (!$user) {
             return response()->json([
-               'message' => 'Usuário não encontrado!'
+               'error' => 'Usuário não encontrado!'
             ], Response::HTTP_NOT_FOUND);
         }
 
