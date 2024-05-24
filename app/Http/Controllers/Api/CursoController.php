@@ -74,6 +74,15 @@ class CursoController extends Controller
 
          $curso = Curso::findOrFail($id);
 
+        // Verificar se o nome do curso já existe no banco de dados em um curso com o id diferente
+         $curso_nome = Curso::where('nome', $request->nome)->where('id', '!=', $id)->first();
+
+         if ($curso_nome) {
+             return response()->json([
+                 'error' => 'Já existe um curso com esse nome!'
+             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+         }
+         
          // Condição para atualizar a coluna status
          if ($request->data_fim !== null) 
          {

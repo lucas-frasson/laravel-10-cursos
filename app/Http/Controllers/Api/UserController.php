@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -79,6 +80,19 @@ class UserController extends Controller
             return response()->json([
                'error' => 'Usuário não encontrado!'
             ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Pegar email do usuário
+        $email = $request->email;
+
+        // Verificar se o email já existe no banco de dados em um usuário com o id diferente
+        $existingUser = User::where('email', $email)->where('id', '!=', $id)->first();
+
+        // Verificar se existe um usuário com o mesmo email
+        if ($existingUser) {
+            return response()->json([
+               'error' => 'Já existe um usuário cadastrado com esse email!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // Atualizar usuário
