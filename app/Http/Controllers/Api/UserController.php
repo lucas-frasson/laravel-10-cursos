@@ -117,12 +117,10 @@ class UserController extends Controller
         // Deletar usuário
         $user->delete();
 
-        // Retornar mensagem de sucesso
-        return response()->json([
-           'message' => 'Usuário deletado com sucesso!'
-        ], Response::HTTP_NO_CONTENT);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
+    // deleted_at
     public function delete_usuario(string $id)
     {
         // Pegar usuário pelo id
@@ -140,10 +138,7 @@ class UserController extends Controller
                 'deleted_at' => date('Y-m-d H:i:s')
         ]);
 
-        // Retornar mensagem de sucesso
-        return response()->json([
-           'message' => 'Usuário deletado com sucesso!'
-        ], Response::HTTP_NO_CONTENT);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
 }
