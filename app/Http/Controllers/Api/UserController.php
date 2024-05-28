@@ -14,10 +14,29 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function index_usuarios()
+    public function index_usuarios(Request $request)
     {
-        // Pegar todos os usuarios cadastrados no banco de dados orderby id asc
-        $users = User::orderBy('id', 'asc')->get(); 
+
+        // Pegando o nome ou e-mail e o tipo do usuário
+        $nome_email = $request->nome_email;
+        $type = $request->type;
+
+        // Inicia a query
+        $query = User::query();
+
+        // Aplica filtro de nome ou e-mail, se existir
+        if (!empty($nome_email)) {
+            $query->where('name', 'like', "%{$nome_email}%")
+                ->orWhere('email', 'like', "%{$nome_email}%");
+        }
+        
+        // Aplica filtro de tipo, se existir
+        if (!empty($type)) {
+            $query->where('type', $type);
+        }
+
+        // Ordena os resultados orderby id asc
+        $users = $query->orderBy('id', 'asc')->get();
         
         // Retornar todos os usuários cadastrados
         return UserResource::collection($users);
