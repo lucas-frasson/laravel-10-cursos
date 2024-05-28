@@ -15,20 +15,40 @@ class CursoController extends Controller
 {
     public function index(Request $request)
     {     
-         // Pegar email do usuário
-         $email = $request->email;
+          // Pegar email do usuário
+          $email = $request->email;
 
-         // Procurar o id do usuário com esse email
-         $user = User::where('email', $email)->first();
+          // Procurar o id do usuário com esse email
+          $user = User::where('email', $email)->first();
 
-         // Pegar o id do usuário
-         $id = $user->id;
+          // Pegar o id do usuário
+          $id = $user->id;
 
-         // Pegar todos os cursos do usuário orderby id asc
-         $cursos = Curso::where('id_user', $id)->orderBy('id', 'asc')->get();
+          // Pegando o que vier do input pesquisar e o status do curso
+          $pesquisar = $request->pesquisar;
+          $status = $request->status;
 
-         // Retornar todos os cursos do usuário
-         return CursoResource::collection($cursos);
+          // Inicia a query
+          $query = Curso::query()->where('id_user', $id);
+
+          // Aplica filtro de nome, plataforma, data_inicio e data_fim, se existir
+          if (!empty($pesquisar)) {
+               $query->where('nome', 'like', "%{$pesquisar}%")
+                    ->orWhere('plataforma', 'like', "%{$pesquisar}%")
+                    ->orWhere('data_inicio', 'like', "%{$pesquisar}%")
+                    ->orWhere('data_fim', 'like', "%{$pesquisar}%");
+          }
+
+          // Aplica filtro de status, se existir
+          if (!empty($status)) {
+               $query->where('status', $status);
+          }
+
+          // Ordena os resultados orderby id asc
+          $cursos = $query->orderBy('id', 'asc')->get();
+
+          // Retornar todos os cursos do usuário
+          return CursoResource::collection($cursos);
     }
 
     public function store(Request $request)
