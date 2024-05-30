@@ -25,9 +25,12 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('/index_usuarios', [UserController::class, 'index_usuarios']);
     Route::post('/usuarios', [UserController::class,'store_usuario']); 
     Route::get('/usuarios/{id}', [UserController::class,'show_usuario']);
-    Route::patch('/usuarios/{id}', [UserController::class, 'update_usuario']);
-    Route::delete('/usuarios/{id}', [UserController::class, 'destroy_usuario']);
-    Route::get('/delete_usuario/{id}', [UserController::class, 'delete_usuario']);
+    Route::post('/update_usuario/{id}', [UserController::class, 'update_usuario']);
+    Route::post('/destroy_usuario/{id}', [UserController::class, 'destroy_usuario']);
+    Route::post('/delete_usuario/{id}', [UserController::class, 'delete_usuario']);
+
+    // Admin
+    Route::post('/verifica_admin', [UserController::class, 'verifica_admin']);
 });
 
 // Rota de teste

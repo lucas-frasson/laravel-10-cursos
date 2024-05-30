@@ -17,7 +17,27 @@ class UserController extends Controller
     public function index_usuarios(Request $request)
     {
 
-        // Pegando o nome ou e-mail e o tipo do usuário
+        // Pegar email do usuário
+        $email = $request->email;
+
+        // Consultando usuário no banco de dados
+        $user = User::where('email', $email)->first();
+
+        // Verificar se o usuário existe
+        if (!$user) {
+            return response()->json([
+                'error' => 'Usuário não encontrado!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Verificar se o usuário é admin
+        if ($user->type != 'admin') {
+            return response()->json([
+                'error' => 'Sem permissão!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Pegando o nome ou e-mail e o tipo do usuário pesquisado
         $nome_email = $request->nome_email;
         $type = $request->type;
 
@@ -44,11 +64,32 @@ class UserController extends Controller
 
     public function store_usuario(Request $request)
     {
-        // Pegar email do usuário
-        $email = $request->email;
+
+         // Pegar email do usuário
+         $email = $request->email;
+
+         // Consultando usuário no banco de dados
+         $isAdmin = User::where('email', $email)->first();
+ 
+         // Verificar se o usuário existe
+         if (!$isAdmin) {
+             return response()->json([
+                 'error' => 'Usuário não encontrado!'
+             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+         }
+ 
+         // Verificar se o usuário é admin
+         if ($isAdmin->type != 'admin') {
+             return response()->json([
+                 'error' => 'Sem permissão!'
+             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+         }
+
+        // Pegar email do novo usuário
+        $email_usuario = $request->email_usuario;
 
         // Verificar se o email já existe no banco de dados
-        $user = User::where('email', $email)->first();
+        $user = User::where('email', $email_usuario)->first();
 
         // Verificar se o usuário existe
         if ($user) {
@@ -63,7 +104,7 @@ class UserController extends Controller
         // Criar novo usuário
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->email_usuario,
             'type' => $request->type,
             'email_verified_at' => now(),
             'password' => $password,
@@ -92,17 +133,38 @@ class UserController extends Controller
 
     public function update_usuario(Request $request, string $id)
     {
-        // Pegar usuário pelo id
+
+         // Pegar email do usuário
+         $email_usuario = $request->email_usuario;
+
+         // Consultando usuário no banco de dados
+         $isAdmin = User::where('email', $email_usuario)->first();
+ 
+         // Verificar se o usuário existe
+         if (!$isAdmin) {
+             return response()->json([
+                 'error' => 'Usuário não encontrado!'
+             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+         }
+ 
+         // Verificar se o usuário é admin
+         if ($isAdmin->type != 'admin') {
+             return response()->json([
+                 'error' => 'Sem permissão!'
+             ], Response::HTTP_UNPROCESSABLE_ENTITY);
+         }
+
+        // Pegar usuário editado pelo id
         $user = User::find($id);
 
-        // Verificar se o usuário existe
+        // Verificar se o usuário editado existe
         if (!$user) {
             return response()->json([
                'error' => 'Usuário não encontrado!'
             ], Response::HTTP_NOT_FOUND);
         }
 
-        // Pegar email do usuário
+        // Pegar email do usuário editado
         $email = $request->email;
 
         // Verificar se o email já existe no banco de dados em um usuário com o id diferente
@@ -122,12 +184,33 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function destroy_usuario(string $id)
+    public function destroy_usuario(string $id, Request $request)
     {
-        // Pegar usuário pelo id
-        $user = User::find($id);
+
+        // Pegar email do usuário
+        $email = $request->email;
+
+        // Consultando usuário no banco de dados
+        $isAdmin = User::where('email', $email)->first();
 
         // Verificar se o usuário existe
+        if (!$isAdmin) {
+            return response()->json([
+                'error' => 'Usuário não encontrado!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Verificar se o usuário é admin
+        if ($isAdmin->type != 'admin') {
+            return response()->json([
+                'error' => 'Sem permissão!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Pegar usuário deletado pelo id
+        $user = User::find($id);
+
+        // Verificar se o usuário deletado existe
         if (!$user) {
             return response()->json([
                'error' => 'Usuário não encontrado!'
@@ -141,12 +224,33 @@ class UserController extends Controller
     }
 
     // deleted_at
-    public function delete_usuario(string $id)
+    public function delete_usuario(string $id, Request $request)
     {
-        // Pegar usuário pelo id
-        $user = User::find($id);
+
+        // Pegar email do usuário
+        $email = $request->email;
+
+        // Consultando usuário no banco de dados
+        $isAdmin = User::where('email', $email)->first();
 
         // Verificar se o usuário existe
+        if (!$isAdmin) {
+            return response()->json([
+                'error' => 'Usuário não encontrado!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Verificar se o usuário é admin
+        if ($isAdmin->type != 'admin') {
+            return response()->json([
+                'error' => 'Sem permissão!'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Pegar usuário deletado pelo id
+        $user = User::find($id);
+
+        // Verificar se o usuário deletado existe
         if (!$user) {
             return response()->json([
                'error' => 'Usuário não encontrado!'
@@ -161,4 +265,30 @@ class UserController extends Controller
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
+    public function verifica_admin(Request $request)
+    {
+
+        // Pegar email do usuário
+        $email = $request->email;
+
+        // Verificar se o email já existe no banco de dados
+        $user = User::where('email', $email)->first();
+
+        // Verificar se o usuário existe
+        if (!$user) {
+            return response()->json([
+               'error' => 'Usuário não encontrado!'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Verificar se o usuário é administrador
+        if ($user->type != 'admin') {
+            return response()->json([
+               'error' => 'Usuário não é administrador!'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Retornar true
+        return Response::HTTP_OK;
+    }
 }
