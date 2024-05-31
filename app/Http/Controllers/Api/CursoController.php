@@ -90,12 +90,24 @@ class CursoController extends Controller
 
     public function update(Request $request, string $id)
     {
+     
+          // Pegar email do usuário
+         $email = $request->email;
+
+         // Procurar o id do usuário com esse email
+         $user = User::where('email', $email)->first();
+
+         // Pegar o id do usuário
+         $id_user = $user->id;
+
          $data = $request->all();
 
          $curso = Curso::findOrFail($id);
 
-        // Verificar se o nome do curso já existe no banco de dados em um curso com o id diferente
-         $curso_nome = Curso::where('nome', $request->nome)->where('id', '!=', $id)->first();
+         // Verificar se o nome do curso já existe no banco de dados em um curso com o id diferente e id do usuário igual
+         $curso_nome = Curso::where('id_user', '=', $id_user)
+                              ->where('nome', $request->nome)
+                              ->where('id', '!=', $id)->first();
 
          if ($curso_nome) {
              return response()->json([
